@@ -17,7 +17,9 @@ class PersonaService {
             $dto->nombre_persona,
             $dto->apellido_persona,
             $dto->clave_persona,
-            $dto->correo_persona
+            $dto->correo_persona,
+            $dto->bloqueado,
+            $dto->numero_intentos
         );
 
         // Guardar la entidad en la base de datos usando el repositorio
@@ -38,7 +40,9 @@ class PersonaService {
             $dto->nombre_persona,
             $dto->apellido_persona,
             $dto->clave_persona,
-            $dto->correo_persona
+            $dto->correo_persona,
+            $dto->bloqueado,
+            $dto->numero_intentos
         );
              // Actualizar la entidad en la base de datos usando el repositorio
              $this->personaRepository->update($persona, $personaExistente->id);

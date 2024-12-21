@@ -53,7 +53,9 @@ switch ($requestMethod) {
                 $data['nombre_persona'],
                 $data['apellido_persona'],
                 $data['clave_persona'],
-                $data['correo_persona']
+                $data['correo_persona'],
+                $data['bloqueado'],
+                $data['numer_intentos']
             );
             
             // Llamar al servicio para crear la persona
@@ -81,7 +83,9 @@ switch ($requestMethod) {
                 $data['nombre_persona'],
                 $data['apellido_persona'],
                 $data['clave_persona'],
-                $data['correo_persona']
+                $data['correo_persona'],
+                $data['bloqueado'],
+                $data['numer_intentos']
             );
             
             // Llamar al servicio para crear la persona

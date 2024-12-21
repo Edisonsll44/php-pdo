@@ -32,7 +32,7 @@ switch ($requestMethod) {
             } else {
 
                 http_response_code(404);
-                echo json_encode(['message' => 'Contacto no encontrada']);
+                echo json_encode(['success' => false,'message' => 'Contacto no encontrada']);
             }
         } else {
             // Obtener todas las Contactos
@@ -60,14 +60,17 @@ switch ($requestMethod) {
             // Llamar al servicio para crear la Contacto
             if ($contactoService->createContacto($contactoDTO)) {
                 http_response_code(201);
-                echo json_encode(['message' => 'Contacto creado']);
+                echo json_encode([
+                'success' => true,
+                'message' => 'Contacto creado'
+            ]);
             } else {
                 http_response_code(400);
-                echo json_encode(['message' => 'Error al crear el contacto']);
+                echo json_encode(['success' => false,'message' => 'Error al crear el contacto']);
             }
         } else {
             http_response_code(400);
-            echo json_encode(['message' => 'Datos incompletos']);
+            echo json_encode(['success' => false, 'message' => 'Datos incompletos']);
         }
         break;
 
@@ -89,14 +92,14 @@ switch ($requestMethod) {
             // Llamar al servicio para crear la Contacto
             if ($contactoService->updateContacto($contactoDTO)) {
                 http_response_code(201);
-                echo json_encode(['message' => 'Contacto actualizado']);
+                echo json_encode(['success' => true, 'message' => 'Contacto actualizado']);
             } else {
                 http_response_code(400);
-                echo json_encode(['message' => 'Error al actualizar el contacto']);
+                echo json_encode(['success' => false, 'message' => 'Error al actualizar el contacto']);
             }
         } else {
             http_response_code(400);
-            echo json_encode(['message' => 'Datos incompletos']);
+            echo json_encode(['success' => false, 'message' => 'Datos incompletos']);
         }
         break;
 
@@ -104,15 +107,15 @@ switch ($requestMethod) {
         if (isset($requestUri[2])) {
             $id = $requestUri[2];
             if ($contactoService->deleteContacto($id)) {
-                http_response_code(204);
-                echo json_encode(['message' => 'Contacto eliminada']);
+                http_response_code(200);
+                echo json_encode(['success' => true, 'message' => 'Contacto eliminada']);
             } else {
                 http_response_code(404);
-                echo json_encode(['message' => 'Contacto no encontrada']);
+                echo json_encode(['success' => false, 'message' => 'Contacto no encontrada']);
             }
         } else {
             http_response_code(400);
-            echo json_encode(['message' => 'Id de contacto no proporcionado']);
+            echo json_encode(['success' => false, 'message' => 'Id de contacto no proporcionado']);
         }
         break;
 
@@ -123,6 +126,6 @@ switch ($requestMethod) {
 
     default:
         http_response_code(405); // Method Not Allowed
-        echo json_encode(['message' => 'Método no permitido']);
+        echo json_encode(['success' => false, 'message' => 'Método no permitido']);
         break;
 }

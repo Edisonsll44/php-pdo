@@ -114,7 +114,9 @@ class PersonaRepository {
                 $result['nom_persona'],
                 $result['ape_persona'],
                 $result['clave_persona'],
-                $result['correo_persona']
+                $result['correo_persona'],
+                $result['bloqueado'],
+                $result['intentos_fallidos']
             );
         } else {
             echo "Persona no encontrada.\n";
@@ -134,11 +136,58 @@ class PersonaRepository {
                 $row['nom_persona'],
                 $row['ape_persona'],
                 $row['clave_persona'],
-                $row['correo_persona']
+                $row['correo_persona'],
+                $row['bloqueado'],
+                $row['intentos_fallidos']
             );
         }
 
         return $personas;
+    }
+
+    public function getUserAutenticate($ci_persona, $clave_persona): PersonaDTO|null {
+        
+        $sql = "SELECT * FROM persona WHERE ci_persona = :ci_persona and clave_persona = :clave_persona ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':ci_persona', $ci_persona);
+        $stmt->bindParam(':clave_persona', $clave_persona);
+
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result) {
+            return new PersonaDTO(
+                $result['cod_persona'],
+                $result['ci_persona'],
+                $result['nom_persona'],
+                $result['ape_persona'],
+                $result['clave_persona'],
+                $result['correo_persona'],
+                $result['bloqueado'],
+                $result['intentos_fallidos']
+            );
+        } 
+        return null;
+    }
+
+    public function updateIntentsAndBlockPerson(PersonaDTO $persona) {
+        $sql = "UPDATE persona SET 
+                    intentos_fallidos = :intentos_fallidos,
+                    bloqueado = :bloqueado
+                WHERE ci_persona = :ci_persona";
+    
+        $stmt = $this->pdo->prepare($sql);
+        // Almacenar los valores en variables
+        $intentos_fallidos = $persona->getIntentosFallidos();
+        $bloqueado = $persona->getBloqueado();
+        $ci_persona = $persona->getCiPersona();
+    
+        // Pasar las variables a bindParam
+        $stmt->bindParam(':intentos_fallidos', $intentos_fallidos);
+        $stmt->bindParam(':bloqueado', $bloqueado, PDO::PARAM_BOOL);
+        $stmt->bindParam(':ci_persona', $ci_persona);
+        $stmt->execute();
     }
 }
 ?>

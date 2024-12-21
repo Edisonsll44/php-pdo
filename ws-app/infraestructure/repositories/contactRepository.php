@@ -27,11 +27,7 @@ class ContactoRepository {
         $stmt->bindParam(':telefono_contacto', $telefono_contacto);
         $stmt->bindParam(':persona_cod_persona', $persona_cod_persona);
 
-        if ($stmt->execute()) {
-            echo "Contato guardado exitosamente.\n";
-        } else {
-            echo "Error al guardar el contacto.\n";
-        }
+        $stmt->execute();
     }
 
     public function update(Contacto $contacto, $id) {
@@ -60,13 +56,7 @@ class ContactoRepository {
          $stmt->bindParam(':persona_cod_persona', $persona_cod_persona);
          $stmt->bindParam(':id', $id);
 
-
-
-        if ($stmt->execute()) {
-            echo "Contacto actualizado exitosamente.\n";
-        } else {
-            echo "Error al actualizar el contacto.\n";
-        }
+        $stmt->execute();
     }
 
     public function delete($cod_contacto): bool {
@@ -86,12 +76,6 @@ class ContactoRepository {
         try {
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':cod_contacto', $cod_contacto);
-    
-            if ($stmt->execute()) {
-                echo "Contacto eliminado exitosamente.\n";
-            } else {
-                echo "Error al eliminar el contacto.\n";
-            }
             return $stmt->execute();
         } catch (PDOException $e) {
             echo "Error en la base de datos: " . $e->getMessage() . "\n";
@@ -128,7 +112,7 @@ class ContactoRepository {
     }
 
     public function getAll() {
-        $sql = "SELECT  c.cod_contacto, c.ape_contacto, c.email_contacto, c.nom_contacto, c.telefono_contacto, c.persona_cod_persona, p.ci_persona FROM contacto c
+        $sql = "SELECT  c.cod_contacto, c.ape_contacto, c.email_contacto, c.nom_contacto, c.telefono_contacto, c.persona_cod_persona, CONCAT(p.nom_persona,' ',p.ape_persona) as ci_persona  FROM contacto c
                 inner join persona p on c.persona_cod_persona = p.cod_persona";
         $stmt = $this->pdo->query($sql);
         $personas = [];
